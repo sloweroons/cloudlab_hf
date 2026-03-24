@@ -1,4 +1,4 @@
-# Architektúra
+# Architektúra 
 Az alábbi komponensek, mint microservice-ek fognak futni a kész keretrendszerben:
 -	Deployment: Docker
     o	Korábbi tapasztalat, kezelhetőség, alkalmazás image-ek tárolása Docker Hub-on
