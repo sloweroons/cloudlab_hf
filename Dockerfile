@@ -1,7 +1,9 @@
-FROM python:3.6.15-slim-buster
-RUN pip3 install flask requests
-RUN useradd pythonuser-ms /bin/bash
+FROM python:3.9-slim-buster
+RUN pip3 install --no-cache-dir flask requests
+RUN useradd -m pythonuser
 WORKDIR /home/pythonuser/app
-USER pythonuser
 COPY app/app.py .
-CMD python-u app.p
+RUN chown -R pythonuser:pythonuser /home/pythonuser/app
+USER pythonuser
+EXPOSE 5000
+CMD ["python3", "-u", "app.py"]
