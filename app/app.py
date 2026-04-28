@@ -14,7 +14,13 @@ redis_client = redis.Redis(host='my-redis-master', port=6379, decode_responses=T
 
 @app.route("/")
 def root():
-    return "<p>cloudlab-hf</p>"
+    return '''
+        <form action="/upload" method="post" enctype="multipart/form-data">
+            <input type="file" name="image">
+            <input type="text" name="desc" placeholder="Leírás">
+            <input type="submit" value="Feltöltés">
+        </form>
+    '''
 
 @app.route("/test")
 def test_ocr():    
