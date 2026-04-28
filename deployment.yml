@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: cloud_hf
+  name: cloud-hf
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: cloud_hf
+      app: cloud-hf
   template:
     metadata:
       labels:
-        app: cloud_hf
+        app: cloud-hf
     spec:
       containers:
       - name: frontend
-        image: sloweroons/cloud_hf:latest
+        image: sloweroons/cloud-hf:latest
         imagePullPolicy:
         ports:
         - containerPort: 3000
