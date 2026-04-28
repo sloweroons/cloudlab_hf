@@ -10,13 +10,15 @@ app = Flask(__name__)
 UPLOAD_FOLDER = '/tmp/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-redis_client = redis.Redis(host='my-redis-master', port=6379, decode_responses=True)@app.route("/")
+redis_client = redis.Redis(host='my-redis-master', port=6379, decode_responses=True, password='Nu6ZxICTnj')
+
+@app.route("/")
 def root():
     return '''
         <form action="/upload" method="post" enctype="multipart/form-data">
             <input type="file" name="image">
             <input type="text" name="desc" placeholder="...">
-            <input type="submit" value="Upload">
+            <input type="submit" value="Feltöltés">
         </form>
     '''
 
