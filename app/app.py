@@ -20,7 +20,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 redis_client = redis.Redis(host='my-redis-master', port=6379, decode_responses=True)
 
-@app.route("/version")
+@app.route("/test")
 def test_ocr():
     try:
         py_ver = pytesseract.get_tesseract_version()
