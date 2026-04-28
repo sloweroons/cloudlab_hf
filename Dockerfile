@@ -6,7 +6,7 @@ RUN apt-get update && apt-get install -y \
     libtesseract-dev \
     && rm -rf /var/lib/apt/lists/*
 
-RUN pip3 install --no-cache-dir flask requests pytesseract
+RUN pip3 install --no-cache-dir flask requests pytesseract redis Pillow
 
 RUN useradd -m pythonuser
 WORKDIR /home/pythonuser/app
