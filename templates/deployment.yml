@@ -1,3 +1,4 @@
+--- # App deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -18,7 +19,7 @@ spec:
         imagePullPolicy: Always
         ports:
         - containerPort: 5000  
----
+--- # Flask service
 apiVersion: v1
 kind: Service
 metadata:
@@ -31,3 +32,21 @@ spec:
       port: 80
       targetPort: 5000
   type: NodePort
+--- # Ingress
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: ocr-app-ingress
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: flask-service
+            port:
+              number: 80
