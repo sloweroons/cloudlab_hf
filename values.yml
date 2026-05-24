@@ -1,11 +1,9 @@
 my-redis:
-  auth:
-    enabled: false
-  architecture: replication
-  replica:
-    replicaCount: 3
+  image:
+    registry: registry-1.docker.io
+    repository: library/redis
+    tag: 8.6.3-alpine
 
 my-minio:
-  auth:
-    rootUser: "admin"
-    rootPassword: "admin"
+  image:
+    tag: latest

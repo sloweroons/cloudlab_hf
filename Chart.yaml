@@ -1,16 +1,17 @@
 apiVersion: v2
-name: cloudlab_hf
+name: cloudlab-hf
 description: I53LZ8
 type: application
 version: 1.0.0
 appVersion: "1.0.0"
 
-dependencies:
-  - name: redis
-    version: ">= 17.0.0 < 20.0.0"
-    repository: https://charts.bitnami.com/bitnami
-    alias: my-redis
-  - name: minio
-    version: ">= 12.0.0"
-    repository: https://charts.bitnami.com/bitnami
-    alias: my-minio
+# Köszi bitnami
+#dependencies:
+#  - name: redis
+#    version: "19.6.1"
+#    repository: https://charts.bitnami.com/bitnami
+#    alias: my-redis
+#  - name: minio
+#    version: "12.8.3"
+#    repository: https://charts.bitnami.com/bitnami
+#    alias: my-minio

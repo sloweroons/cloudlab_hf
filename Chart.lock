@@ -1,9 +1,0 @@
-dependencies:
-- name: redis
-  repository: https://charts.bitnami.com/bitnami
-  version: 19.6.4
-- name: minio
-  repository: https://charts.bitnami.com/bitnami
-  version: 17.0.21
-digest: sha256:33c003aabf185654b5344077248956d83fdf647d610530157b22d42e7b88f3bc
-generated: "2026-05-18T20:11:18.241372651+02:00"

@@ -50,3 +50,84 @@ spec:
             name: flask-service
             port:
               number: 80
+--- # Redis deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: manual-redis
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: manual-redis
+  template:
+    metadata:
+      labels:
+        app: manual-redis
+    spec:
+      containers:
+      - name: redis
+        image: redis:7-alpine
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 6379
+--- # Redis service
+apiVersion: v1
+kind: Service
+metadata:
+  name: manualredis-service
+spec:
+  selector:
+    app: manual-redis
+  ports:
+    - protocol: TCP
+      port: 6379
+      targetPort: 6379
+  type: ClusterIP
+
+--- # MinIO deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: manual-minio
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: manual-minio
+  template:
+    metadata:
+      labels:
+        app: manual-minio
+    spec:
+      containers:
+      - name: minio
+        image: minio/minio:latest
+        imagePullPolicy: IfNotPresent
+        args: ["server", "/data", "--console-address", ":9090"]
+        env:
+        - name: MINIO_ROOT_USER
+          value: "admin"
+        - name: MINIO_ROOT_PASSWORD
+          value: "SuperSecurePassword123"
+        ports:
+        - containerPort: 9000
+        - containerPort: 9090
+--- # MinIO service
+apiVersion: v1
+kind: Service
+metadata:
+  name: manual-minio-service
+spec:
+  selector:
+    app: manual-minio
+  ports:
+    - name: api
+      protocol: TCP
+      port: 9000
+      targetPort: 9000
+    - name: console
+      protocol: TCP
+      port: 9090
+      targetPort: 9090
+  type: ClusterIP
