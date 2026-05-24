@@ -75,10 +75,10 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: manualredis-service
+  name: manual-redis-service
 spec:
   selector:
-    app: redis-service
+    app: manual-redis
   ports:
     - protocol: TCP
       port: 6379
@@ -130,3 +130,22 @@ spec:
       port: 9090
       targetPort: 9090
   type: ClusterIP
+# Worker
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: operator-worker
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: operator-worker
+  template:
+    metadata:
+      labels:
+        app: operator-worker
+    spec:
+      containers:
+      - name: worker
+        image: sloweroons/cloud-worker:latest
+        imagePullPolicy: Always
