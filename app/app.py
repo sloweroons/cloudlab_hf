@@ -20,7 +20,7 @@ def root():
     return '''
         <form action="/upload" method="post" enctype="multipart/form-data">
             <input type="file" name="image">
-            <input type="text" name="desc" placeholder="...">
+            <input type="text" name="desc" placeholder="AAA">
             <input type="submit" value="Upload">
         </form>
        
