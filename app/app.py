@@ -28,7 +28,6 @@ def root():
 
 @app.route('/upload', methods=['POST'])
 def upload():
-    
     try:
         if 'image' not in request.files:
             return "No image", 400
@@ -51,6 +50,11 @@ def upload():
 
         output_path = os.path.join(UPLOAD_FOLDER, "proc_" + file.filename)
         img.save(output_path)
+        
+        detected_text = " ".join([word.strip() for word in d['text'] if word.strip()])
+
+        notification_message = f"Leiras: {description} | Szoveg: {detected_text}"
+        redis_client.publish('operator_notifications', notification_message)
         
         return f"Description: {description}. Image location: {output_path}"
     except Exception as e:
