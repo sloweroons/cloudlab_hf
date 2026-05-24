@@ -17,7 +17,7 @@ def root():
     py_ver = pytesseract.get_tesseract_version()
     sys_ver = subprocess.check_output(["tesseract", "--version"]).decode("utf-8")
 
-    return """
+    return f"""
         <form action="/upload" method="post" enctype="multipart/form-data">
             <input type="file" name="image">
             <input type="text" name="desc" placeholder="...">
