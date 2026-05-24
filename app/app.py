@@ -24,7 +24,7 @@ def root():
             <input type="submit" value="Upload">
         </form>
        
-        <h2>OCR Status: OK</h2><p>Pytesseract version: {py_ver}</p><pre>{sys_ver}</pre>
+        <p>OCR Status: OK</p><br><p>Pytesseract version: {py_ver}</p><pre>{sys_ver}</pre>
     "   
 
 @app.route('/upload', methods=['POST'])
