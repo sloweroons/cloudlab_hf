@@ -17,18 +17,19 @@ def root():
     py_ver = pytesseract.get_tesseract_version()
     sys_ver = subprocess.check_output(["tesseract", "--version"]).decode("utf-8")
 
-    return '''
+    return f"
         <form action="/upload" method="post" enctype="multipart/form-data">
             <input type="file" name="image">
-            <input type="text" name="desc" placeholder="AAA">
+            <input type="text" name="desc" placeholder="...">
             <input type="submit" value="Upload">
         </form>
        
-        <h2>OCR Status: OK</h2><p>Pytesseract version: {py_ver}</p><pre>{sys_ver}</pre>"
-    '''
+        <h2>OCR Status: OK</h2><p>Pytesseract version: {py_ver}</p><pre>{sys_ver}</pre>
+    "   
 
 @app.route('/upload', methods=['POST'])
 def upload():
+    
     try:
         if 'image' not in request.files:
             return "No image", 400
