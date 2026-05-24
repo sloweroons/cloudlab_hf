@@ -108,7 +108,7 @@ spec:
         - name: MINIO_ROOT_USER
           value: "admin"
         - name: MINIO_ROOT_PASSWORD
-          value: "SuperSecurePassword123"
+          value: "admin"
         ports:
         - containerPort: 9000
         - containerPort: 9090

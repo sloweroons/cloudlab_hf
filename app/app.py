@@ -10,7 +10,7 @@ app = Flask(__name__)
 UPLOAD_FOLDER = '/tmp/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-redis_client = redis.Redis(host='manual-redis-service', port=6379, decode_responses=True, password='Nu6ZxICTnj')
+redis_client = redis.Redis(host='manual-redis-service', port=6379, decode_responses=True, password=None)
 
 @app.route("/")
 def root():
