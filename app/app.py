@@ -16,7 +16,7 @@ redis_client = redis.Redis(host='my-redis-master', port=6379, decode_responses=T
 def root():
     py_ver = pytesseract.get_tesseract_version()
     sys_ver = subprocess.check_output(["tesseract", "--version"]).decode("utf-8")
-    
+
     return '''
         <form action="/upload" method="post" enctype="multipart/form-data">
             <input type="file" name="image">
@@ -25,9 +25,7 @@ def root():
         </form>
             try:
        
-        return f"<h1>OCR Status: OK</h1><p>Pytesseract version: {py_ver}</p><pre>{sys_ver}</pre>"
-    except Exception as e:
-        return f"<h1>OCR Error</h1><p>{str(e)}</p>"
+        <h2>OCR Status: OK</h2><p>Pytesseract version: {py_ver}</p><pre>{sys_ver}</pre>"
     '''
 
 @app.route('/upload', methods=['POST'])
