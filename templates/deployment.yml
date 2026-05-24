@@ -78,13 +78,12 @@ metadata:
   name: manualredis-service
 spec:
   selector:
-    app: manual-redis
+    app: redis-service
   ports:
     - protocol: TCP
       port: 6379
       targetPort: 6379
   type: ClusterIP
-
 --- # MinIO deployment
 apiVersion: apps/v1
 kind: Deployment

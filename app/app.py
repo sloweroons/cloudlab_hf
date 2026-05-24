@@ -10,14 +10,14 @@ app = Flask(__name__)
 UPLOAD_FOLDER = '/tmp/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-redis_client = redis.Redis(host='my-redis-master', port=6379, decode_responses=True, password='Nu6ZxICTnj')
+redis_client = redis.Redis(host='redis-service', port=6379, decode_responses=True, password='Nu6ZxICTnj')
 
 @app.route("/")
 def root():
     py_ver = pytesseract.get_tesseract_version()
     sys_ver = subprocess.check_output(["tesseract", "--version"]).decode("utf-8")
 
-    return f"
+    return """
         <form action="/upload" method="post" enctype="multipart/form-data">
             <input type="file" name="image">
             <input type="text" name="desc" placeholder="...">
@@ -25,7 +25,7 @@ def root():
         </form>
        
         <p>OCR Status: OK</p><br><p>Pytesseract version: {py_ver}</p><pre>{sys_ver}</pre>
-    "   
+    """
 
 @app.route('/upload', methods=['POST'])
 def upload():
