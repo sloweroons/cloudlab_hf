@@ -23,7 +23,6 @@ def root():
             <input type="text" name="desc" placeholder="...">
             <input type="submit" value="Upload">
         </form>
-            try:
        
         <h2>OCR Status: OK</h2><p>Pytesseract version: {py_ver}</p><pre>{sys_ver}</pre>"
     '''
