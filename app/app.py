@@ -15,7 +15,6 @@ redis_client = redis.Redis(host='redis-service', port=6379, decode_responses=Tru
 @app.route("/")
 def root():
     py_ver = pytesseract.get_tesseract_version()
-    sys_ver = subprocess.check_output(["tesseract", "--version"]).decode("utf-8")
 
     return f"""
         <form action="/upload" method="post" enctype="multipart/form-data">
@@ -24,7 +23,7 @@ def root():
             <input type="submit" value="Upload">
         </form>
        
-        <p>Pytesseract version: {py_ver}{sys_ver}</p>
+        <p>Pytesseract version: {py_ver}</p>
     """
 
 @app.route('/upload', methods=['POST'])
