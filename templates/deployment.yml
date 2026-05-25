@@ -1,4 +1,4 @@
---- # App deployment
+--- # Flask deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,6 +19,9 @@ spec:
       - name: frontend
         image: sloweroons/cloud-hf:latest
         imagePullPolicy: Always
+        env:
+        - name: TZ
+          value: "Europe/Budapest"
         ports:
         - containerPort: 5000  
 --- # Flask service
