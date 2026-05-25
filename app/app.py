@@ -125,7 +125,7 @@ def database():
                     ExpiresIn=3600
                 )
                 external_url = raw_url.replace('http://manual-minio-service:9000', 'http://localhost:30009')
-                image = f'<img src="{external_url}" alt="Processed Image" style="max-width: 150px; height: auto;">'  
+                image = f'<a href="{external_url}" target="_blank">View Processed Image</a>'
             except Exception:
                 image = "No processed image available"
 
