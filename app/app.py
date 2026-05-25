@@ -70,6 +70,9 @@ def upload():
             <form action="/" method="get">
                 <input type="submit" value="Return">
             </form>
+            <form action="/maintenance" method="get">
+                <input type="submit" value="Go to Maintenance">
+            </form>
         """
     except Exception as e:
         return f"Error: {str(e)}", 500
