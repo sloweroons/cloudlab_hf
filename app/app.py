@@ -16,6 +16,19 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 build_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 redis_client = redis.Redis(host='manual-redis-service', port=6379, decode_responses=True, password='adminpass')
 
+s3_client = boto3.client(
+    's3',
+    endpoint_url='http://manual-minio-service:9000',
+    aws_access_key_id='admin',
+    aws_secret_access_key='adminpass'
+)
+BUCKET_NAME = 'ocr-images'
+
+try:
+    s3_client.create_bucket(Bucket=BUCKET_NAME)
+except Exception:
+    pass
+
 # ROOT ENDPOINT
 @app.route("/")
 def root():
@@ -29,8 +42,11 @@ def root():
             <input type="text" name="desc" placeholder="...">
             <input type="submit" value="Upload">
         </form>
-        <form action="/maintenance" method="get">
-            <input type="submit" value="Maintenance">
+        <form action="/database" method="get">
+            <input type="submit" value="Database">
+        </form>
+        <form action="/admin" method="get">
+            <input type="submit" value="Admin">
         </form>
        
         <p>Pytesseract version: {py_ver}</p>
@@ -70,6 +86,17 @@ def upload():
         redis_client.set(file.filename, description_and_text)
         redis_client.publish('operator_notifications', description_and_text)
 
+        s3_client.upload_file(
+            Filename=output_path,
+            Bucket=BUCKET_NAME,
+            Key=f"proc_{file.filename}",
+            ExtraArgs={
+                "Metadata": {
+                    "description-and-text": description_and_text.encode('utf-8').decode('latin1')
+                }
+            }
+        )
+        
         return f"""
             <p>Description: {description_and_text}.<p>
             <p>Image location for testing: {output_path}</p>
@@ -80,9 +107,9 @@ def upload():
     except Exception as e:
         return f"Error: {str(e)}", 500
 
-# MAINTENANCE ENDPOINT -> 3. SUBTASK
-@app.route('/maintenance', methods=['GET'])
-def maintenance():
+# DB ENDPOINT -> 3. SUBTASK
+@app.route('/database', methods=['GET'])
+def database():
     try:
         keys = redis_client.keys('*')
         table_rows = ""
@@ -107,7 +134,7 @@ def maintenance():
             <form action="/" method="get">
                 <input type="submit" value="Back to Home">
             </form>
-            <form action="/maintenance/clear" method="post" style="display:inline;">
+            <form action="/database/clear" method="post" style="display:inline;">
                 <input type="submit" value="Clear Redis Database" style="background-color: red; color: white; padding: 5px 10px; border: none; cursor: pointer;">
             </form>
         """
@@ -115,7 +142,7 @@ def maintenance():
         return f"Error: {str(e)}", 500
 
 # CLEAR DB
-@app.route('/maintenance/clear', methods=['POST'])
+@app.route('/database/clear', methods=['POST'])
 def clear_redis():
     try:
         redis_client.flushall()
@@ -124,12 +151,22 @@ def clear_redis():
             <form action="/" method="get">
                 <input type="submit" value="Back to Home">
             </form>
-            <form action="/maintenance" method="get">
-                <input type="submit" value="Back to Maintenance">
+            <form action="/database" method="get">
+                <input type="submit" value="Back to Database">
             </form>
         """
     except Exception as e:
         return f"Error: {str(e)}", 500
+
+# ADMIN ENDPOINT -> MESSAGE BROKER
+@app.route('/admin')
+def admin():
+    return """
+        <form action="/" method="get">
+            <input type="submit" value="Back to Home">
+        </form>
+    """
+
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
