@@ -55,7 +55,6 @@ spec:
             name: flask-service
             port:
               number: 80
-              apiVersion: networking.k8s.io/v1
 --- # Ingress Controller Minikube -> MinIO
 apiVersion: networking.k8s.io/v1
 kind: Ingress
