@@ -157,7 +157,7 @@ def database():
 
 # CLEAR DB
 @app.route('/database/clear', methods=['POST'])
-def clear_redis():
+def clear_redis(): 
     try:
         redis_client.flushall()
         return """
