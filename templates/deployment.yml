@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: cloud-hf
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: cloud-hf
@@ -61,7 +61,7 @@ kind: Deployment
 metadata:
   name: manual-redis
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: manual-redis
@@ -96,7 +96,7 @@ kind: Deployment
 metadata:
   name: manual-minio
 spec:
-  replicas: 0
+  replicas: 1
   selector:
     matchLabels:
       app: manual-minio
@@ -136,7 +136,7 @@ spec:
       port: 9090
       targetPort: 9090
   type: ClusterIP
-# Worker
+# Message Broker
 apiVersion: apps/v1
 kind: Deployment
 metadata:
