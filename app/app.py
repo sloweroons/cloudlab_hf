@@ -6,6 +6,8 @@ import pytesseract
 from datetime import datetime
 from PIL import Image, ImageDraw
 import boto3
+import time
+from botocore.exceptions import EndpointConnectionError
 
 app = Flask(__name__)
 
@@ -23,6 +25,17 @@ s3_client = boto3.client(
     aws_secret_access_key='adminpass'
 )
 BUCKET_NAME = 'ocr-images'
+while True:
+    try:
+        s3_client.list_buckets()
+        break
+    except (EndpointConnectionError, Exception):
+        time.sleep(2)
+
+try:
+    s3_client.create_bucket(Bucket=BUCKET_NAME)
+except Exception:
+    pass
 
 # ROOT ENDPOINT
 @app.route("/")
