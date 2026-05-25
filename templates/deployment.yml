@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: cloud-hf
 spec:
-  replicas: 1
+  replicas: 2
   selector:
     matchLabels:
       app: cloud-hf
@@ -55,6 +55,13 @@ spec:
             name: flask-service
             port:
               number: 80
+      - path: /minio/?(.*) 
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: manual-minio-service
+            port:
+              number: 9000
 --- # Redis deployment
 apiVersion: apps/v1
 kind: Deployment
@@ -96,7 +103,7 @@ kind: Deployment
 metadata:
   name: manual-minio
 spec:
-  replicas: 1
+  replicas: 3
   selector:
     matchLabels:
       app: manual-minio
