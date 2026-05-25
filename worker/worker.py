@@ -5,7 +5,7 @@ print("-> worker thread initializing", flush=True)
 
 r = redis.Redis(host='manual-redis-service', port=6379, decode_responses=True, password='adminpass')
 
-print("-> fetching Redis in-memory database", flush=True)
+print("-> Attempting connection with in-memory Redis database", flush=True)
 while True:
     try:
         if r.ping():
@@ -13,6 +13,8 @@ while True:
     except redis.exceptions.ConnectionError:
         print("-- # Redis offline, waiting...", flush=True)
         time.sleep(2)
+print("-- # Redis online", flush=True)
+print("-> Fetching Redis in-memory database", flush=True)
 try:
     all_keys = r.keys('*')
     if not all_keys:
