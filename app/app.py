@@ -18,6 +18,7 @@ build_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
 @app.route("/")
 def root():
+    
     py_ver = pytesseract.get_tesseract_version()
     current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
@@ -29,7 +30,6 @@ def root():
         </form>
        
         <p>Pytesseract version: {py_ver}</p>
-        <br>
         <p>Build time: {build_time}</p>
         <p>Current time: {current_time}</p>
     """
