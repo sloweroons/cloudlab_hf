@@ -104,7 +104,7 @@ def maintenance():
             </table>
             <br>
             <form action="/" method="get">
-                <input type="submit" value="Return">
+                <input type="submit" value="Back to Home">
             </form>
             <form action="/maintenance/clear" method="post" style="display:inline;">
                 <input type="submit" value="Clear Redis Database" style="background-color: red; color: white; padding: 5px 10px; border: none; cursor: pointer;">
@@ -119,7 +119,10 @@ def clear_redis():
     try:
         redis_client.flushall()
         return """
-            <p>Redis database successfully cleared!</p>
+            <p>Redis database flushed</p>
+            <form action="/" method="get">
+                <input type="submit" value="Back to Home">
+            </form>
             <form action="/maintenance" method="get">
                 <input type="submit" value="Back to Maintenance">
             </form>
