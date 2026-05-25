@@ -23,7 +23,7 @@ def root():
             <input type="submit" value="Upload">
         </form>
        
-        <p>Pytesseract version: TESZT {py_ver}</p>
+        <p>Pytesseract version: {py_ver}</p>
     """
 
 @app.route('/upload', methods=['POST'])
