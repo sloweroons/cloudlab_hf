@@ -3,6 +3,7 @@ import os
 import redis
 from flask import Flask, request
 import pytesseract
+from datetime import datetime
 from PIL import Image, ImageDraw
 
 app = Flask(__name__)
