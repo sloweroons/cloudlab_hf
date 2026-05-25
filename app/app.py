@@ -65,7 +65,7 @@ def upload():
         img.save(output_path)
         
         detected_text = " ".join([word.strip() for word in d['text'] if word.strip()])
-        description_and_text = f"Description: {description} | Text: {detected_text}"
+        description_and_text = f"{description};<b>{detected_text}</b>"
         redis_client.set(file.filename, description_and_text)
         redis_client.publish('operator_notifications', description_and_text)
         
