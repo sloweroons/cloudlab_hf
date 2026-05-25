@@ -13,7 +13,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 build_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
-redis_client = redis.Redis(host='manual-redis-service', port=6379, decode_responses=True, password="adminpass")
+redis_client = redis.Redis(host='manual-redis-service', port=6379, decode_responses=True, password='adminpass')
 
 @app.route("/")
 def root():
