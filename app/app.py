@@ -99,7 +99,6 @@ def maintenance():
                 <tr style="background-color: #f2f2f2;">
                     <th>File name</th>
                     <th>Description</th>
-                    <th>Output file name</th>
                 </tr>
                 {table_rows if table_rows else '<tr><td colspan="3">No uploads yet.</td></tr>'}
             </table>
