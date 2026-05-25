@@ -51,7 +51,6 @@ def upload():
         filepath = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(filepath)
 
-        redis_client.set(file.filename, description)
         img = Image.open(filepath).convert("RGB")
         d = pytesseract.image_to_data(img, output_type=pytesseract.Output.DICT)
         
@@ -66,11 +65,12 @@ def upload():
         img.save(output_path)
         
         detected_text = " ".join([word.strip() for word in d['text'] if word.strip()])
-        notification_message = f"Description: {description} | Text: {detected_text}"
-        redis_client.publish('operator_notifications', notification_message)
+        description_and_text = f"Description: {description} | Text: {detected_text}"
+        redis_client.set(file.filename, description_and_text)
+        redis_client.publish('operator_notifications', description_and_text)
         
         return f"""
-            <p>Description: {description}.<p>
+            <p>Description: {description_and_text}.<p>
             <p>Image location for testing: {output_path}</p>
             <form action="/" method="get">
                 <input type="submit" value="Return">
@@ -86,13 +86,11 @@ def maintenance():
         keys = redis_client.keys('*')
         table_rows = ""
         for filename in keys:
-            description = redis_client.get(filename)
-            proc_filename = f"proc_{filename}"
+            description_and_text = redis_client.get(filename)
             table_rows += f"""
                 <tr>
                     <td>{filename}</td>
-                    <td>{description}</td>
-                    <td>{proc_filename}</td>
+                    <td>{description_and_text}</td>
                 </tr>
             """
             
