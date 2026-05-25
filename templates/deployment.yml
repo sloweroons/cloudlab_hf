@@ -4,7 +4,7 @@ kind: Deployment
 metadata:
   name: cloud-hf
 spec:
-  replicas: 2
+  replicas: 0
   selector:
     matchLabels:
       app: cloud-hf
@@ -61,7 +61,7 @@ kind: Deployment
 metadata:
   name: manual-redis
 spec:
-  replicas: 3
+  replicas: 0
   selector:
     matchLabels:
       app: manual-redis
@@ -96,7 +96,7 @@ kind: Deployment
 metadata:
   name: manual-minio
 spec:
-  replicas: 3
+  replicas: 0
   selector:
     matchLabels:
       app: manual-minio
@@ -150,6 +150,8 @@ spec:
     metadata:
       labels:
         app: operator-worker
+      annotations:
+        rollout-trigger: {{ randAlphaNum 5 | quote }}
     spec:
       containers:
       - name: worker
