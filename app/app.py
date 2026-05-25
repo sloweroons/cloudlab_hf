@@ -45,9 +45,6 @@ def root():
         <form action="/database" method="get">
             <input type="submit" value="Database">
         </form>
-        <form action="/admin" method="get">
-            <input type="submit" value="Admin">
-        </form>
        
         <p>Pytesseract version: {py_ver}</p>
         <p>Build time: {build_time}</p>
@@ -148,16 +145,6 @@ def clear_redis():
         """
     except Exception as e:
         return f"Error: {str(e)}", 500
-
-# ADMIN ENDPOINT -> MESSAGE BROKER
-@app.route('/admin')
-def admin():
-    return """
-        <form action="/" method="get">
-            <input type="submit" value="Back to Home">
-        </form>
-    """
-
 
 if __name__ == '__main__':
     app.run(host="0.0.0.0", port=5000)
