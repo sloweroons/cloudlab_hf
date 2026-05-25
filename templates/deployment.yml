@@ -55,25 +55,6 @@ spec:
             name: flask-service
             port:
               number: 80
---- # Ingress Controller Minikube -> MinIO
-apiVersion: networking.k8s.io/v1
-kind: Ingress
-metadata:
-  name: minio-ingress
-  annotations:
-    nginx.ingress.kubernetes.io/rewrite-target: /$1
-spec:
-  ingressClassName: nginx
-  rules:
-  - http:
-      paths:
-      - path: /minio/?(.*)
-        pathType: ImplementationSpecific
-        backend:
-          service:
-            name: manual-minio-service
-            port:
-              number: 9000
 --- # Redis deployment
 apiVersion: apps/v1
 kind: Deployment

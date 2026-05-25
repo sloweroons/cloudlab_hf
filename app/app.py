@@ -16,19 +16,6 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 build_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 redis_client = redis.Redis(host='manual-redis-service', port=6379, decode_responses=True, password='adminpass')
 
-s3_client = boto3.client(
-    's3',
-    endpoint_url='http://manual-minio-service:9000',
-    aws_access_key_id='admin',
-    aws_secret_access_key='adminpass'
-)
-BUCKET_NAME = 'ocr-images'
-
-try:
-    s3_client.create_bucket(Bucket=BUCKET_NAME)
-except Exception:
-    pass
-
 # ROOT ENDPOINT
 @app.route("/")
 def root():
@@ -83,17 +70,6 @@ def upload():
         redis_client.set(file.filename, description_and_text)
         redis_client.publish('operator_notifications', description_and_text)
 
-        s3_client.upload_file(
-            Filename=output_path,
-            Bucket=BUCKET_NAME,
-            Key=f"proc_{file.filename}",
-            ExtraArgs={
-                "Metadata": {
-                    "description-and-text": description_and_text.encode('utf-8').decode('latin1')
-                }
-            }
-        )
-        
         return f"""
             <p>Description: {description_and_text}.<p>
             <p>Image location for testing: {output_path}</p>
