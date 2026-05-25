@@ -27,6 +27,9 @@ def root():
             <input type="text" name="desc" placeholder="...">
             <input type="submit" value="Upload">
         </form>
+        <form action="/maintenance" method="get">
+            <input type="submit" value="Maintenance">
+        </form>
        
         <p>Pytesseract version: {py_ver}</p>
         <p>Build time: {build_time}</p>
@@ -69,9 +72,6 @@ def upload():
             <p>Image location for testing: {output_path}</p>
             <form action="/" method="get">
                 <input type="submit" value="Return">
-            </form>
-            <form action="/maintenance" method="get">
-                <input type="submit" value="Go to Maintenance">
             </form>
         """
     except Exception as e:
