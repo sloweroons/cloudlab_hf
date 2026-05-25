@@ -12,6 +12,8 @@ spec:
     metadata:
       labels:
         app: cloud-hf
+      annotations:
+        rollout-trigger: {{ randAlphaNum 5 | quote }}
     spec:
       containers:
       - name: frontend
