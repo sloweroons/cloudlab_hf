@@ -1,10 +1,8 @@
 import redis
 import time
 
-# A tájékoztató szöveg maradjon tiszta
-print("Operator Notification Worker elindult, varakozas az uzenetekre...", flush=True)
+print("-> worker init", flush=True)
 
-# A jelszót kizárólag a redis.Redis-nek adjuk át!
 r = redis.Redis(host='manual-redis-service', port=6379, decode_responses=True, password='adminpass')
 pubsub = r.pubsub()
 pubsub.subscribe('operator_notifications')

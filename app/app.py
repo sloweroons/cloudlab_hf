@@ -11,6 +11,9 @@ app = Flask(__name__)
 UPLOAD_FOLDER = '/tmp/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
+build_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+
+
 # redis_client = redis.Redis(host='manual-redis-service', port=6379, decode_responses=True, password=None)
 
 @app.route("/")
@@ -26,6 +29,8 @@ def root():
         </form>
        
         <p>Pytesseract version: {py_ver}</p>
+        <br>
+        <p>Build time: {build_time}</p>
         <p>Current time: {current_time}</p>
     """
 

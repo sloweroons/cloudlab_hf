@@ -71,6 +71,7 @@ spec:
       - name: redis
         image: redis:7-alpine
         imagePullPolicy: IfNotPresent
+        args: ["redis-server", "--requirepass", "adminpass"]
         ports:
         - containerPort: 6379
 --- # Redis service
