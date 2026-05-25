@@ -8,11 +8,11 @@ from PIL import Image, ImageDraw
 
 app = Flask(__name__)
 
+# TESTING
 UPLOAD_FOLDER = '/tmp/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
 build_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-
 redis_client = redis.Redis(host='manual-redis-service', port=6379, decode_responses=True, password='adminpass')
 
 @app.route("/")
@@ -42,10 +42,11 @@ def upload():
         file = request.files['image']
         description = request.form.get('desc', 'No description')
         
+        # TESTING
         filepath = os.path.join(UPLOAD_FOLDER, file.filename)
         file.save(filepath)
-        redis_client.set(file.filename, description)
 
+        redis_client.set(file.filename, description)
         img = Image.open(filepath).convert("RGB")
         d = pytesseract.image_to_data(img, output_type=pytesseract.Output.DICT)
         
@@ -55,15 +56,54 @@ def upload():
                 (x, y, w, h) = (d['left'][i], d['top'][i], d['width'][i], d['height'][i])
                 draw.rectangle([x, y, x + w, y + h], outline="red", width=3)
 
+        # TESTING
         output_path = os.path.join(UPLOAD_FOLDER, "proc_" + file.filename)
         img.save(output_path)
         
         detected_text = " ".join([word.strip() for word in d['text'] if word.strip()])
-
-        notification_message = f"Leiras: {description} | Szoveg: {detected_text}"
+        notification_message = f"Description: {description} | Text: {detected_text}"
         redis_client.publish('operator_notifications', notification_message)
         
-        return f"Description: {description}. Image location: {output_path}"
+        return f"""
+            <p>Description: {description}.<p>
+            <p>Image location for testing: {output_path}</p>
+            <form action="/" method="get">
+                <input type="submit" value="Return">
+            </form>
+        """
+    except Exception as e:
+        return f"Error: {str(e)}", 500
+
+@app.route('/maintenance', methods=['GET'])
+def maintenance():
+    try:
+        keys = redis_client.keys('*')
+        table_rows = ""
+        for filename in keys:
+            description = redis_client.get(filename)
+            proc_filename = f"proc_{filename}"
+            table_rows += f"""
+                <tr>
+                    <td>{filename}</td>
+                    <td>{description}</td>
+                    <td>{proc_filename}</td>
+                </tr>
+            """
+            
+        return f"""
+            <table border="1" style="border-collapse: collapse; width: 100%; text-align: left;">
+                <tr style="background-color: #f2f2f2;">
+                    <th>File name</th>
+                    <th>Description</th>
+                    <th>Output file name</th>
+                </tr>
+                {table_rows if table_rows else '<tr><td colspan="3">No uploads yet.</td></tr>'}
+            </table>
+            <br>
+            <form action="/" method="get">
+                <input type="submit" value="Return">
+            </form>
+        """
     except Exception as e:
         return f"Error: {str(e)}", 500
 
