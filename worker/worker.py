@@ -19,7 +19,7 @@ while True:
         time.sleep(2)
 
 current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-print(f"-- # {current_time} Redis online", flush=True)
+print(f"-- # {current_time} - Redis online", flush=True)
 print(f"-> {current_time} - Fetching Redis in-memory database", flush=True)
 try:
     all_keys = r.keys('*')
@@ -36,7 +36,7 @@ except Exception as e:
     print(f"-- # {current_time} - Error fetching data: {e}", flush=True)
 
 current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-print(f"-> {current_time} - enabling notifications", flush=True)
+print(f"-> {current_time} - Enabling notifications", flush=True)
 
 pubsub = r.pubsub()
 pubsub.subscribe('operator_notifications')

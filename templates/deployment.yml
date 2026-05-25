@@ -36,7 +36,7 @@ spec:
     - protocol: TCP
       port: 80
       targetPort: 5000
-  type: ClusterIP
+  type: NodePort
 --- # Ingress Controller External -> Flask
 apiVersion: networking.k8s.io/v1
 kind: Ingress
@@ -105,6 +105,10 @@ spec:
       labels:
         app: manual-minio
     spec:
+      volumes:
+      - name: minio-storage
+        hostPath:
+          path: /data/minios
       containers:
       - name: minio
         image: minio/minio:latest
@@ -118,6 +122,9 @@ spec:
         ports:
         - containerPort: 9000
         - containerPort: 9090
+        volumeMounts:
+        - name: minio-storage
+          mountPath: /data
 --- # MinIO service
 apiVersion: v1
 kind: Service
@@ -131,11 +138,13 @@ spec:
       protocol: TCP
       port: 9000
       targetPort: 9000
+      nodePort: 30009
     - name: console
       protocol: TCP
       port: 9090
       targetPort: 9090
-  type: ClusterIP
+      nodePort: 30090
+  type: NodePort
 # Message Broker
 apiVersion: apps/v1
 kind: Deployment

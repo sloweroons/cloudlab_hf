@@ -24,11 +24,6 @@ s3_client = boto3.client(
 )
 BUCKET_NAME = 'ocr-images'
 
-try:
-    s3_client.create_bucket(Bucket=BUCKET_NAME)
-except Exception:
-    pass
-
 # ROOT ENDPOINT
 @app.route("/")
 def root():
@@ -75,7 +70,8 @@ def upload():
                 draw.rectangle([x, y, x + w, y + h], outline="red", width=3)
 
         # TESTING
-        output_path = os.path.join(UPLOAD_FOLDER, "_"+file.filename)
+        _filename = "_" + file.filename
+        output_path = os.path.join(UPLOAD_FOLDER, _filename)
         img.save(output_path)
         
         detected_text = " ".join([word.strip() for word in d['text'] if word.strip()])
@@ -83,7 +79,12 @@ def upload():
         redis_client.set(file.filename, description_and_text)
         redis_client.publish('operator_notifications', description_and_text)
 
-        #s3_client.upload_file(Filename=output_path, Bucket=BUCKET_NAME, Key=f"proc_{file.filename}", ExtraArgs={"Metadata": {"description-and-text": description_and_text.encode('utf-8').decode('latin1')}})
+        s3_client.upload_file(Filename=output_path, Bucket=BUCKET_NAME, Key=f"proc_{file.filename}")
+        external_url = s3_client.generate_presigned_url(
+            'get_object',
+            Params={'Bucket': BUCKET_NAME, 'Key': f"proc_{file.filename}"},
+            ExpiresIn=3600
+        ).replace('http://manual-minio-service:9000', 'http://localhost:30009')
         
         return f"""
             <p>Description: {description_and_text}.<p>
@@ -103,10 +104,23 @@ def database():
         table_rows = ""
         for filename in keys:
             description_and_text = redis_client.get(filename)
+
+            try:
+                raw_url = s3_client.generate_presigned_url(
+                    'get_object',
+                    Params={'Bucket': BUCKET_NAME, 'Key': f"proc_{filename}"},
+                    ExpiresIn=3600
+                )
+                external_url = raw_url.replace('http://manual-minio-service:9000', 'http://localhost:30009')
+                image = f'<a href="{external_url}" target="_blank">View Processed Image</a>'
+            except Exception:
+                image = "No image in MinIO"
+
             table_rows += f"""
                 <tr>
                     <td>{filename}</td>
                     <td>{description_and_text}</td>
+                    <td>{image}</td>
                 </tr>
             """
             
@@ -115,6 +129,7 @@ def database():
                 <tr style="background-color: #f2f2f2;">
                     <th>File name</th>
                     <th>Description</th>
+                    <th>Processed Image</th>
                 </tr>
                 {table_rows if table_rows else '<tr><td colspan="3">No uploads yet.</td></tr>'}
             </table>
