@@ -86,16 +86,7 @@ def upload():
         redis_client.set(file.filename, description_and_text)
         redis_client.publish('operator_notifications', description_and_text)
 
-        s3_client.upload_file(
-            Filename=output_path,
-            Bucket=BUCKET_NAME,
-            Key=f"proc_{file.filename}",
-            ExtraArgs={
-                "Metadata": {
-                    "description-and-text": description_and_text.encode('utf-8').decode('latin1')
-                }
-            }
-        )
+        #s3_client.upload_file(Filename=output_path, Bucket=BUCKET_NAME, Key=f"proc_{file.filename}", ExtraArgs={"Metadata": {"description-and-text": description_and_text.encode('utf-8').decode('latin1')}})
         
         return f"""
             <p>Description: {description_and_text}.<p>
