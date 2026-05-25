@@ -44,4 +44,4 @@ pubsub.subscribe('operator_notifications')
 for message in pubsub.listen():
     if message['type'] == 'message':
         current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        print(f"-- # {current_time} - received new OCR data: {message['data']}", flush=True)
+        print(f"-- # {current_time} - New data: {message['data']}", flush=True)
