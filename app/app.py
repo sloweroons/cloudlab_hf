@@ -15,6 +15,7 @@ os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 build_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 redis_client = redis.Redis(host='manual-redis-service', port=6379, decode_responses=True, password='adminpass')
 
+# ROOT ENDPOINT
 @app.route("/")
 def root():
     
@@ -36,6 +37,7 @@ def root():
         <p>Current time: {current_time}</p>
     """
 
+# UPLOAD ENDPOINT -> 1. + 2. SUBTASK
 @app.route('/upload', methods=['POST'])
 def upload():
     try:
@@ -77,6 +79,7 @@ def upload():
     except Exception as e:
         return f"Error: {str(e)}", 500
 
+# MAINTENANCE ENDPOINT -> 3. SUBTASK
 @app.route('/maintenance', methods=['GET'])
 def maintenance():
     try:
@@ -105,6 +108,23 @@ def maintenance():
             <br>
             <form action="/" method="get">
                 <input type="submit" value="Return">
+            </form>
+            <form action="/maintenance/clear" method="post" style="display:inline;">
+                <input type="submit" value="Clear Redis Database" style="background-color: red; color: white; padding: 5px 10px; border: none; cursor: pointer;">
+            </form>
+        """
+    except Exception as e:
+        return f"Error: {str(e)}", 500
+
+# CLEAR DB
+@app.route('/maintenance/clear', methods=['POST'])
+def clear_redis():
+    try:
+        redis_client.flushall()
+        return """
+            <p>Redis database successfully cleared!</p>
+            <form action="/maintenance" method="get">
+                <input type="submit" value="Back to Maintenance">
             </form>
         """
     except Exception as e:
