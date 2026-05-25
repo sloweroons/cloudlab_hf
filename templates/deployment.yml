@@ -145,7 +145,7 @@ spec:
       targetPort: 9090
       nodePort: 30090
   type: NodePort
-# Message Broker
+--- # Message Broker
 apiVersion: apps/v1
 kind: Deployment
 metadata:
