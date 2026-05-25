@@ -10,11 +10,12 @@ app = Flask(__name__)
 UPLOAD_FOLDER = '/tmp/uploads'
 os.makedirs(UPLOAD_FOLDER, exist_ok=True)
 
-redis_client = redis.Redis(host='manual-redis-service', port=6379, decode_responses=True, password=None)
+# redis_client = redis.Redis(host='manual-redis-service', port=6379, decode_responses=True, password=None)
 
 @app.route("/")
 def root():
     py_ver = pytesseract.get_tesseract_version()
+    current_time = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
 
     return f"""
         <form action="/upload" method="post" enctype="multipart/form-data">
@@ -24,6 +25,7 @@ def root():
         </form>
        
         <p>Pytesseract version: {py_ver}</p>
+        <p>Current time: {current_time}</p>
     """
 
 @app.route('/upload', methods=['POST'])
